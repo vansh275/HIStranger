@@ -1,0 +1,21 @@
+body{
+    background-color: grey;
+}
+h1{
+    text-align: center;
+    color: white;
+}
+#videos{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 1em;
+    width: 100%;
+    padding: 10px;
+    
+}
+
+video{
+    width:80%;
+    border:2px solid greenyellow;
+    background-color: rgb(63,62,62);
+} 
