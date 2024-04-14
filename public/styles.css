@@ -6,20 +6,20 @@ h1{
     color: #E3FEF7;
 }
 #videos{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 1em;
+    text-align: center;
+    /* display: inline-block;    */
     width: 100%;
-    margin: 4%;
-    
 }
 button{
     margin:5px;
 }
 video{
-    width:80%;
+    display: inline-block;
+    width: 480px; /* Adjust as needed */
+    height: 360px; /* Adjust as needed */
     border:2px solid #77B0AA;
     background-color: rgb(63,62,62);
+    margin: 2%;
 } 
 
 @media (max-width:480px){
@@ -34,5 +34,11 @@ video{
     .video-player{
         margin: 10% 0 10% 0;
     }
+    video{
+        width: 360px; /* Adjust as needed */
+        height: 240px; /* Adjust as needed */
+        border:2px solid #77B0AA;
+        background-color: rgb(63,62,62);
+    } 
 
 }
