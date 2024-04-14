@@ -1,21 +1,38 @@
 body{
-    background-color: grey;
+    background-color: #135D66;
 }
 h1{
     text-align: center;
-    color: white;
+    color: #E3FEF7;
 }
 #videos{
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 1em;
     width: 100%;
-    padding: 10px;
+    margin: 4%;
     
 }
-
+button{
+    margin:5px;
+}
 video{
     width:80%;
-    border:2px solid greenyellow;
+    border:2px solid #77B0AA;
     background-color: rgb(63,62,62);
 } 
+
+@media (max-width:480px){
+    body{
+        background-color: #135D66;
+    }
+    #videos{
+        text-align: center;
+        display: block;
+        margin: 0;       
+    }
+    .video-player{
+        margin: 10% 0 10% 0;
+    }
+
+}
