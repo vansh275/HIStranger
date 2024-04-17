@@ -1,9 +1,35 @@
 body{
-    background-color: #135D66;
+    background-color: #FBA1B7;
+    color: #FFD1DA;
+}
+*:focus {
+    outline: 0 !important;
+}
+.omegleheading{
+    font-size: 4rem;
+    position: absolute;
+}
+.dark{
+    background-color: black;
+    h1,h5{
+        color: white;
+    }
+    video{
+        background-color: #31363F;
+    }
+}
+.theme-button{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 24px;
+    margin: 2%;
+}
+#themeImg{
+    width: 5%;
 }
 h1{
     text-align: center;
-    color: #E3FEF7;
 }
 #videos{
     text-align: center;
@@ -17,14 +43,29 @@ video{
     display: inline-block;
     width: 480px; /* Adjust as needed */
     height: 360px; /* Adjust as needed */
-    border:2px solid #77B0AA;
-    background-color: rgb(63,62,62);
+    border:2px solid black;
+    background-color: #FEA1A1;
     margin: 2%;
 } 
 
+
 @media (max-width:480px){
+    .dark{
+        background-color: black;
+        h1,h5{
+            color: white;
+        }
+        video{
+            background-color: #31363F;
+        }
+    }
+    .omegleheading{
+        font-size: 4rem;
+        position: relative;
+    }
     body{
-        background-color: #135D66;
+        background-color: #FBA1B7;
+        color: #FFD1DA;
     }
     #videos{
         text-align: center;

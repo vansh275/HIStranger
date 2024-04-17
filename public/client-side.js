@@ -91,11 +91,25 @@ async function connect(){
 
 
 async function disconnect(){
-    peerConnection.close();
-    peerConnection = null;
+    peerConnection.close()
+    peerConnection = null
     // Reset any other necessary variables
     disconnectBtn.disabled=true
     connectBtn.disabled=false
 }
+let themeButton= document.querySelector(".theme-button")
+let body=document.body
+let modeText=document.querySelector('#mode')
+async function toggleTheme(){ 
+    body.classList.toggle('dark')
+    if(modeText.textContent=='Dark'){
+        modeText.textContent='Light'
+    }
+    else{
+        modeText.textContent='Dark'
+    }
+    
+}
 
+themeButton.addEventListener('click',toggleTheme)
 //start()
