@@ -68,9 +68,13 @@ async function start(){
         }
     })
 
-    connectBtn.disabled=true
-    disconnectBtn.disabled=false
-    console.log("calling whatNow ")
+    socket.on('wait', (data) => {
+        console.log('Message from server:', data);
+        alert(data.text);
+    });
+
+    // connectBtn.disabled=true
+    await connect()
     socket.emit('whatNow',socket.id)
     
 
@@ -79,23 +83,35 @@ async function start(){
 let connectBtn= document.querySelector("#connect-btn")
 let disconnectBtn= document.querySelector("#disconnect-btn")
 disconnectBtn.disabled=true
-connectBtn.addEventListener("click",start)
+connectBtn.addEventListener("click",Stop)
 disconnectBtn.addEventListener("click",disconnect)
 
+
+async function Stop(){
+    peerConnection.close()
+    peerConnection = null
+
+    disconnectBtn.textContent="Reconnect"
+}
 async function connect(){
-    connectBtn.disabled=true
+    // connectBtn.disabled=true
+    connectBtn.textContent='Stop'
     disconnectBtn.disabled=false
     console.log("calling whatNow ")
-    socket.emit('whatNow',socket.id)
 }
 
 
 async function disconnect(){
+
+    if(disconnectBtn.textContent==='Reconnect'){
+        location.reload()
+    }
     peerConnection.close()
     peerConnection = null
     // Reset any other necessary variables
     disconnectBtn.disabled=true
     connectBtn.disabled=false
+    location.reload()
 }
 let themeButton= document.querySelector(".theme-button")
 let body=document.body
@@ -110,6 +126,15 @@ async function toggleTheme(){
     }
     
 }
+
+
+window.addEventListener('beforeunload', () => {
+    socket.emit('disconnect')
+  });
+
+window.addEventListener('load',()=>{
+    start();
+});
 
 themeButton.addEventListener('click',toggleTheme)
 //start()

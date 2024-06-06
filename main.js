@@ -8,46 +8,90 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
-//  STACK IMPLEMENTATION 
-class Stack {
+class Vector {
+
   constructor() {
-    this.items = [];
+    this.data = []; // Array to store socket IDs
+    this.pointer=0;
   }
 
-  push(element) {
-    this.items.push(element);
+  // Method to add a socket ID to the vector
+
+  showPointer(){
+    console.log('pointer is '+this.pointer);
+  }
+  add(socketId) {
+    this.data[this.pointer]=socketId;
+    this.pointer++
+    this.showPointer()
   }
 
-  pop() {
-    if (this.isEmpty()) {
-      return "Underflow";
+  swapWithLast(p) {
+    if (p >= 0 && p <= this.data.length) {
+      console.log('inside swap');
+      this.data[p] = this.data[(this.pointer)-1]; // Replace element at index p with value at pointer
+      // this.data[p]=-1
+      this.pointer--; // Decrement pointer
+      this.showPointer()
+    } else {
+      console.error("Index out of bounds");
     }
-    return this.items.pop();
+  }
+  
+
+  // Method to remove a socket ID from the vector
+  remove(socketId) {
+    const index = this.data.indexOf(socketId);
+    if (index !== -1) {
+      this.data.splice(index, 1);
+    }
   }
 
-  peek() {
-    return !this.isEmpty() ? this.items[this.items.length - 1] : "No elements in Stack";
+  // Method to check if a socket ID exists in the vector
+  contains(socketId) {
+    return this.data.includes(socketId);
   }
 
+  // Method to get the size of the vector
+  size() {
+    return this.data.length;
+  }
+
+  // Method to get all socket IDs in the vector
+  getAll() {
+    return this.data;
+  }
+
+  // Method to check if the vector is empty
   isEmpty() {
-    return this.items.length === 0;
+    return this.data.length === 0;
   }
 
-  printStack() {
-    let str = "";
-    for (let i = 0; i < this.items.length; i++)
-      str += this.items[i] + " ";
-    return str;
+  giveAvailUser(){
+    const user=this.data[(this.pointer)-1]
+    this.pointer--
+    this.showPointer()
+    return user
+  }
+
+  getPointer(){
+    return this.pointer
   }
 }
-//Making Stack for socketid where users stay and wait for connection 
-const users= new Stack();
+
+// Example usage:
+const vector = new Vector();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
     // res.send("<h1>hello</h1>");
     res.sendFile(join(__dirname, 'index.html'));
+});
+
+app.get('/check',(req,res)=>{
+  console.log('omegle is ok');
+    res.sendStatus(200);
 });
 
 io.on('connection', (socket) => {
@@ -63,6 +107,23 @@ io.on('connection', (socket) => {
     console.log(candidate);
   })
 
+    socket.on('disconnect',()=>{
+      var pt=0
+      console.log('inside dis ');
+      const disId=socket.id
+      for (let i = 0; i < vector.getPointer(); i++) {
+        const socketId = vector.getAll()[i];
+        console.log('socketId ' + socketId);
+        console.log('disId ' + disId);
+        if (socketId === disId) {
+          vector.swapWithLast(pt);
+        }
+        pt++;
+      }
+      // console.log('deleted? ');
+      // console.log(vector.getAll());
+    })
+
   //checking for stack empty
   // socket.on('id',(id,offer)=>{
   //   console.log("server side for id call "+ id);
@@ -77,15 +138,18 @@ io.on('connection', (socket) => {
   //   }
   // })
   socket.on('whatNow',id=>{
-    if(users.isEmpty()){
+    if(!vector.getPointer()){
       console.log("pushed user "+id);
-      users.push(id)
+      vector.add(id)
+      console.log(vector.getAll());
+      // socket.emit('wait',{text:'waiting'});
       // io.to(id).emit('youWillReceiveOffer')
     }
     else{
-      let toUser=users.pop()
-      console.log("seding id of this to this "+toUser+" "+id);
-      io.to(id).emit('sendOffer',toUser)
+      const user=vector.giveAvailUser()
+      // vector.decrement()
+      io.to(id).emit('sendOffer',user)
+      console.log("seding id of this to this "+user+" "+id);
     }
   })
 
