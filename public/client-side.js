@@ -133,6 +133,7 @@ window.addEventListener('beforeunload', () => {
   });
 
 window.addEventListener('load',()=>{
+    alert('Free server is very slow, like it is not working')
     start();
 });
 
